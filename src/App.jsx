@@ -1,11 +1,14 @@
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import AppRoutes from "./routes";
 
-const App = () => {
+function App() {
   return (
-    <div className="flex flex-col min-h-screen">
+    <>
       <AppRoutes />
-    </div>
+      <ToastContainer position="top-center" />
+    </>
   );
-};
+}
 
 export default App;

@@ -1,43 +1,110 @@
+import { useState } from "react";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { motion } from "framer-motion";
+import { auth } from "../firebase";
+import Navbar from "../components/navBar/Navbar";
 import Footer from "../components/footer/Footer";
-import { Link } from "react-router-dom";
 
-const Register = () => {
+export default function Register() {
+  // ⚙️ state for the three inputs (UI stays unchanged)
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await createUserWithEmailAndPassword(auth, email, password);
+      toast.success("Account created!");
+      navigate("/dashboard");
+    } catch (err) {
+      toast.error(err.message);
+    }
+  };
+
   return (
     <>
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="bg-white shadow-md rounded px-8 py-6 w-full max-w-md">
-          <h2 className="text-2xl font-bold mb-6 text-center">Sign Up</h2>
-          <form>
-            <input
-              type="email"
-              placeholder="Email"
-              className="input w-full mb-4 border px-3 py-2 rounded"
-            />
-            <input
-              type="password"
-              placeholder="Password"
-              className="input w-full mb-4 border px-3 py-2 rounded"
-            />
-            <input
-              type="password"
-              placeholder="Confirm Password"
-              className="input w-full mb-6 border px-3 py-2 rounded"
-            />
-            <button className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition">
+      <Navbar />
+
+      <section className="min-h-[80vh] bg-[#66b2a3] flex items-center justify-center px-4 py-20">
+        <motion.div
+          initial={{ scale: 0.9, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 0.5 }}
+          className="bg-white shadow-xl rounded-2xl p-10 w-full max-w-md"
+        >
+          <h2 className="text-3xl font-bold text-center text-[#66b2a3] mb-6">
+            Create Your BudgetBox Account
+          </h2>
+
+          {/* 🔑 unchanged UI – just wired up */}
+          <form className="space-y-5" onSubmit={handleSubmit}>
+            <div>
+              <label className="block text-gray-700 font-medium mb-1">
+                Full Name
+              </label>
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#66b2a3]"
+                placeholder="John Doe"
+                required
+              />
+            </div>
+
+            <div>
+              <label className="block text-gray-700 font-medium mb-1">
+                Email
+              </label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#66b2a3]"
+                placeholder="you@example.com"
+                required
+              />
+            </div>
+
+            <div>
+              <label className="block text-gray-700 font-medium mb-1">
+                Password
+              </label>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#66b2a3]"
+                placeholder="••••••••"
+                required
+              />
+            </div>
+
+            <button
+              type="submit"
+              className="w-full py-3 bg-[#66b2a3] text-white font-semibold rounded-lg hover:bg-[#549e90] transition"
+            >
               Register
             </button>
           </form>
-          <p className="text-sm mt-4 text-center">
+
+          <p className="text-sm text-center text-gray-600 mt-6">
             Already have an account?{" "}
-            <Link to="/login" className="text-blue-600 hover:underline">
+            <a
+              href="/login"
+              className="text-[#66b2a3] hover:underline font-medium"
+            >
               Login
-            </Link>
+            </a>
           </p>
-        </div>
-      </div>
+        </motion.div>
+      </section>
+
       <Footer />
     </>
   );
-};
-
-export default Register;
+}
