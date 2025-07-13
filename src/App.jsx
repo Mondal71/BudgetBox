@@ -1,13 +1,11 @@
-import { useState } from 'react'
+import AppRoutes from "./routes";
 
-function App() {
-  const [count, setCount] = useState(0)
-
+const App = () => {
   return (
-    <>
-      <h1 className='text-red-500'>BudgetBox</h1>
-    </>
-  )
-}
+    <div className="flex flex-col min-h-screen">
+      <AppRoutes />
+    </div>
+  );
+};
 
-export default App
+export default App;
